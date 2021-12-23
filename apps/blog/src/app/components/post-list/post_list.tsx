@@ -4,7 +4,13 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 import { CommentCreate } from "../comment-create"
 import { CommentList } from "../comment-list"
 
+interface Comment {
+  content: string;
+  id: string;
+}
+
 interface Post {
+  comments: Array<Comment>
   id: string;
   title: string;
 }
@@ -13,7 +19,7 @@ export const PostList = () => {
   const [posts, setPosts] = useState<Record<string, Post | undefined>>({})
 
   const fetchPosts = useCallback(async () => {
-    const { data } = await axios.get("posts-api/posts")
+    const { data } = await axios.get("query-api/posts")
     setPosts(data)
   }, [])
 
@@ -26,7 +32,7 @@ export const PostList = () => {
     .map(post => (
       <div key={post.id} className="group rounded border-solid border-2 border-gray-300 px-4 py-2">
         <h3 className="text-lg font-medium leading-6 text-gray-700">{post.title}</h3>
-        <CommentList postId={post.id} />
+        <CommentList comments={post.comments} />
         <CommentCreate postId={post.id} />
       </div>
     )

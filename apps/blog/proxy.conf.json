@@ -12,5 +12,12 @@
     "pathRewrite": {
       "^/posts-api": ""
     }
+  },
+  "/query-api": {
+    "target": "http://localhost:4002",
+    "secure": false,
+    "pathRewrite": {
+      "^/query-api": ""
+    }
   }
 }

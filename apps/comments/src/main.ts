@@ -3,6 +3,7 @@
  * This is only a minimal backend to get started.
  */
 
+import axios from "axios";
 import * as express from 'express';
 import * as bodyParser from "body-parser";
 import * as morgan from "morgan";
@@ -13,6 +14,10 @@ app.use(bodyParser.json());
 app.use(morgan('dev'));
 
 const commentsByPostId = {};
+
+app.post("/events", (req, res) => {
+  res.status(204).send()
+})
 
 app.get('/posts/:id/comments', (req, res) => {
   const { id: postId } = req.params
@@ -27,6 +32,14 @@ app.post('/posts/:id/comments', (req, res) => {
     commentsByPostId[postId] = {}
   }
   commentsByPostId[postId][commentId] = { content, id: commentId };
+
+  axios.post("http://localhost:4005/events", {
+    data: {
+      ...commentsByPostId[postId][commentId],
+      postId,
+    },
+    type: "CommentCreated",
+  }).catch((error) => console.error(error));
 
   res.status(201).send(Object.values(commentsByPostId[postId]))
 });

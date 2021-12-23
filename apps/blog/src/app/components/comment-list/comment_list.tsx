@@ -1,23 +1,11 @@
-import axios from "axios"
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useMemo } from "react"
 
 interface Comment {
   content: string;
   id: string;
 }
 
-export const CommentList = ({ postId }: { postId: string }) => {
-  const [comments, setComment] = useState<Array<Comment>>([])
-
-  const fetchPosts = useCallback(async () => {
-    const { data } = await axios.get(`comments-api/posts/${postId}/comments`)
-    setComment(data)
-  }, [])
-
-  useEffect(() => {
-    fetchPosts()
-  }, [fetchPosts])
-
+export const CommentList = ({ comments }: { comments: Array<Comment> }) => {
   const renderedComments = useMemo(() =>
     comments
       .map(post => (
@@ -26,7 +14,6 @@ export const CommentList = ({ postId }: { postId: string }) => {
         </li>
       )
   ), [comments])
-
 
   return (
     <>
