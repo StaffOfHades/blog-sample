@@ -4,11 +4,13 @@
  */
 
 import * as express from 'express';
-import * as bodyParser from "body-parser"
+import * as bodyParser from "body-parser";
+import * as morgan from "morgan";
 import { v4 as uuidv4 } from 'uuid';
 
 const app = express();
-app.use(bodyParser.json())
+app.use(bodyParser.json());
+app.use(morgan('dev'));
 
 const commentsByPostId = {};
 
