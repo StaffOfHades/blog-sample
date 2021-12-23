@@ -1,6 +1,7 @@
 import styles from './app.module.scss';
 
 import { PostCreate } from "./components/post-create"
+import { PostList } from "./components/post-list"
 
 export function App() {
   return (
@@ -11,6 +12,7 @@ export function App() {
           <div className="border-t border-gray-200" />
         </div>
       </div>
+      <PostList />
     </div>
   );
 }
