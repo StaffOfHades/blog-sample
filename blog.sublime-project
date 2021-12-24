@@ -1,0 +1,33 @@
+{
+	"folders":
+	[
+		{
+			"path": ".",
+			"name": "Root"
+		},
+		{
+			"path": "apps/blog/",
+			"name": "Blog App"
+		},
+		{
+			"path": "apps/comments/",
+			"name": "Comments Service"
+		},
+		{
+			"path": "apps/event-bus/",
+			"name": "Event Bus Service"
+		},
+		{
+			"path": "apps/moderation/",
+			"name": "Moderation Service"
+		},
+		{
+			"path": "apps/posts/",
+			"name": "Posts Service"
+		},
+		{
+			"path": "apps/query/",
+			"name": "Query Service"
+		}
+	]
+}

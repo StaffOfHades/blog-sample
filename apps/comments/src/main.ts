@@ -3,7 +3,15 @@
  * This is only a minimal backend to get started.
  */
 
-import { EventType, CommentCreatedEvent, ModerationComment, ModerationStatus } from "@udemy.com/global/types"
+import {
+  CommentCreatedEvent,
+  CommentUpdatedEvent,
+  Event,
+  EventType,
+  ModerationComment,
+  ModerationStatus,
+  isCommentModeratedEvent
+} from "@udemy.com/global/types"
 import axios from "axios";
 import * as express from 'express';
 import * as bodyParser from "body-parser";
@@ -21,7 +29,28 @@ interface Params {
 }
 
 app.post("/events", (req, res) => {
-  res.status(204).send()
+  const event: Event = req.body;
+
+  if (isCommentModeratedEvent(event)) {
+    const { id, postId, status } = event.data;
+    if (commentsByPostId[postId] !== undefined && commentsByPostId[postId][id] !== undefined) {
+      commentsByPostId[postId][id].status = status;
+
+      const event: CommentUpdatedEvent = {
+        data: {
+          id,
+          postId,
+          status,
+        },
+        type: EventType.CommentUpdated,
+      }
+      axios.post("http://localhost:4005/events", event).catch((error) => console.error(error));
+    }
+  } else {
+    res.status(400).send({ status: "Invalid event" });
+    return;
+  }
+  res.status(201).send()
 })
 
 app.get('/posts/:id/comments', (req, res) => {

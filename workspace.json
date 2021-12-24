@@ -6,6 +6,7 @@
     "comments": "apps/comments",
     "event-bus": "apps/event-bus",
     "global-types": "libs/global/types",
+    "moderation": "apps/moderation",
     "posts": "apps/posts",
     "query": "apps/query"
   }

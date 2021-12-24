@@ -2,6 +2,7 @@ import type { ModerationComment, Post } from "./post_types"
 
 export const enum EventType {
   CommentCreated = "CommentCreated",
+  CommentModerated = "CommentModerated",
   CommentUpdated = "CommentUpdated",
   PostCreated = "PostCreated",
 }
@@ -9,6 +10,11 @@ export const enum EventType {
 export interface CommentCreatedEvent {
   data: { postId: string } & ModerationComment;
   type: EventType.CommentCreated;
+}
+
+export interface CommentModeratedEvent {
+  data: { postId: string; } & Pick<ModerationComment, "id" | "status">
+  type: EventType.CommentModerated
 }
 
 export interface CommentUpdatedEvent {
@@ -24,4 +30,4 @@ export interface PostCreatedEvent {
   type: EventType.PostCreated;
 }
 
-export type Event = CommentCreatedEvent | CommentUpdatedEvent | PostCreatedEvent
+export type Event = CommentCreatedEvent | CommentModeratedEvent | CommentUpdatedEvent | PostCreatedEvent

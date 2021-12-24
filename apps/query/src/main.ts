@@ -31,10 +31,10 @@ app.post("/events", (req, res) => {
       posts[postId].comments[comment.id] = comment;
     }
   } else if (isCommentUpdatedEvent(event)) {
-    const { id: commentId, postId, ...comment } = event.data;
-    if (posts[postId] !== undefined && posts[postId][commentId] !== undefined) {
-      posts[postId][commentId] = {
-        ...posts[postId][commentId],
+    const { id, postId, ...comment } = event.data;
+    if (posts[postId] !== undefined && posts[postId].comments[id] !== undefined) {
+      posts[postId].comments[id] = {
+        ...posts[postId].comments[id],
         ...comment,
       }
     }
