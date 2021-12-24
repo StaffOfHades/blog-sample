@@ -5,6 +5,7 @@
     "blog-e2e": "apps/blog-e2e",
     "comments": "apps/comments",
     "event-bus": "apps/event-bus",
+    "global-types": "libs/global/types",
     "posts": "apps/posts",
     "query": "apps/query"
   }

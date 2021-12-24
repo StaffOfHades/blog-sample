@@ -1,22 +1,12 @@
+import { PostAggregate } from "@udemy.com/global/types"
 import axios from "axios"
 import { useCallback, useEffect, useMemo, useState } from "react"
 
 import { CommentCreate } from "../comment-create"
 import { CommentList } from "../comment-list"
 
-interface Comment {
-  content: string;
-  id: string;
-}
-
-interface Post {
-  comments: Array<Comment>
-  id: string;
-  title: string;
-}
-
 export const PostList = () => {
-  const [posts, setPosts] = useState<Record<string, Post | undefined>>({})
+  const [posts, setPosts] = useState<Record<string, PostAggregate>>({})
 
   const fetchPosts = useCallback(async () => {
     const { data } = await axios.get("query-api/posts")
@@ -28,7 +18,6 @@ export const PostList = () => {
   }, [fetchPosts])
 
   const renderedPosts = useMemo(() => Object.values(posts)
-    .filter((post): post is Post => post !== undefined)
     .map(post => (
       <div key={post.id} className="group rounded border-solid border-2 border-gray-300 px-4 py-2">
         <h3 className="text-lg font-medium leading-6 text-gray-700">{post.title}</h3>

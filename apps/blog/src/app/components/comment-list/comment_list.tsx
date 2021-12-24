@@ -1,13 +1,9 @@
+import { ModerationComment } from "@udemy.com/global/types"
 import { useMemo } from "react"
 
-interface Comment {
-  content: string;
-  id: string;
-}
-
-export const CommentList = ({ comments }: { comments: Array<Comment> }) => {
+export const CommentList = ({ comments }: { comments: Record<string, ModerationComment> }) => {
   const renderedComments = useMemo(() =>
-    comments
+    Object.values(comments)
       .map(post => (
         <li key={post.id} className="px-4 py-2">
           <h3 className="text-md text-gray-700">{post.content}</h3>
@@ -15,9 +11,11 @@ export const CommentList = ({ comments }: { comments: Array<Comment> }) => {
       )
   ), [comments])
 
+  const commentLength = useMemo(() => Object.values(comments).length, [comments])
+
   return (
     <>
-      <p className="mt-1 text-sm text-gray-600">{`${comments.length} Comment${comments.length > 1 ? 's' : ''}`}</p>
+      <p className="mt-1 text-sm text-gray-600">{`${commentLength} Comment${commentLength > 1 ? 's' : ''}`}</p>
       <ul className="bg-white mt-2">
         {renderedComments}
       </ul>

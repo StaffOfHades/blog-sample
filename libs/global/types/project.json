@@ -1,0 +1,15 @@
+{
+  "root": "libs/global/types",
+  "sourceRoot": "libs/global/types/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/global/types/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}

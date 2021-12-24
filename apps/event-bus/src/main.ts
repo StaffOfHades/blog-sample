@@ -3,6 +3,7 @@
  * This is only a minimal backend to get started.
  */
 
+import { Event } from "@udemy.com/global/types"
 import axios from "axios"
 import * as express from 'express';
 import * as bodyParser from "body-parser";
@@ -13,7 +14,7 @@ app.use(bodyParser.json());
 app.use(morgan('dev'));
 
 app.post('/events', (req, res) => {
-  const event = req.body;
+  const event: Event = req.body;
 
   Promise.allSettled([
     axios.post("http://localhost:4000/events", event),

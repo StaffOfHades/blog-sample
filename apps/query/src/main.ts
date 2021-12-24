@@ -3,6 +3,13 @@
  * This is only a minimal backend to get started.
  */
 
+import {
+  Event,
+  PostAggregate,
+  isCommentCreatedEvent,
+  isCommentUpdatedEvent,
+  isPostCreatedEvent
+} from "@udemy.com/global/types"
 import * as express from 'express';
 import * as bodyParser from "body-parser";
 import * as morgan from "morgan";
@@ -11,17 +18,25 @@ const app = express();
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 
-const posts = {};
+const posts: Record<string, PostAggregate>  = {};
 
 app.post("/events", (req, res) => {
-  const { data, type } = req.body;
+  const event: Event = req.body;
 
-  if (type === "PostCreated") {
-    posts[data.id] = { ...data, comments: [] };
-  } else if (type === "CommentCreated") {
-    const { postId, ...comment } = data;
+  if (isPostCreatedEvent(event)) {
+    posts[event.data.id] = { ...event.data, comments: {} };
+  } else if (isCommentCreatedEvent(event)) {
+    const { postId, ...comment } = event.data;
     if (posts[postId] !== undefined) {
-      posts[postId].comments.push(comment);
+      posts[postId].comments[comment.id] = comment;
+    }
+  } else if (isCommentUpdatedEvent(event)) {
+    const { id: commentId, postId, ...comment } = event.data;
+    if (posts[postId] !== undefined && posts[postId][commentId] !== undefined) {
+      posts[postId][commentId] = {
+        ...posts[postId][commentId],
+        ...comment,
+      }
     }
   } else {
     res.status(400).send({ status: "Invalid event" });
