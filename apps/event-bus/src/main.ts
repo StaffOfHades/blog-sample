@@ -13,8 +13,15 @@ const app = express();
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 
+const events: Array<Event> = []
+
+app.get('/events', (req, res) => {
+  res.send(events)
+})
+
 app.post('/events', (req, res) => {
   const event: Event = req.body;
+  events.push(event)
 
   Promise.allSettled([
     axios.post("http://localhost:4000/events", event),

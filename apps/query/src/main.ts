@@ -10,6 +10,7 @@ import {
   isCommentUpdatedEvent,
   isPostCreatedEvent
 } from "@udemy.com/global/types"
+import axios from "axios";
 import * as express from 'express';
 import * as bodyParser from "body-parser";
 import * as morgan from "morgan";
@@ -20,17 +21,23 @@ app.use(morgan('dev'));
 
 const posts: Record<string, PostAggregate>  = {};
 
-app.post("/events", (req, res) => {
-  const event: Event = req.body;
-
+const handleEvent = (event: Event): Event | undefined => {
   if (isPostCreatedEvent(event)) {
     posts[event.data.id] = { ...event.data, comments: {} };
-  } else if (isCommentCreatedEvent(event)) {
+
+    return undefined;
+  }
+
+  if (isCommentCreatedEvent(event)) {
     const { postId, ...comment } = event.data;
     if (posts[postId] !== undefined) {
       posts[postId].comments[comment.id] = comment;
     }
-  } else if (isCommentUpdatedEvent(event)) {
+
+    return undefined
+  }
+
+  if (isCommentUpdatedEvent(event)) {
     const { id, postId, ...comment } = event.data;
     if (posts[postId] !== undefined && posts[postId].comments[id] !== undefined) {
       posts[postId].comments[id] = {
@@ -38,7 +45,17 @@ app.post("/events", (req, res) => {
         ...comment,
       }
     }
-  } else {
+
+    return undefined;
+  }
+
+  return event;
+}
+
+app.post("/events", (req, res) => {
+  const event: Event = req.body;
+
+  if (handleEvent(event) !== undefined) {
     res.status(400).send({ status: "Invalid event" });
     return;
   }
@@ -50,7 +67,18 @@ app.get('/posts', (req, res) => {
 });
 
 const port = process.env.port || 4002;
-const server = app.listen(port, () => {
+const server = app.listen(port, async () => {
   console.log(`Listening at http://localhost:${port}/`);
+
+  try {
+    const { data } = await axios.get<Array<Event>>("http://localhost:4005/events")
+    for (let event of data) {
+      if (handleEvent(event) === undefined) {
+        console.log("Processing existing event of type ", event.type)
+      }
+    }
+  } catch (error) {
+    console.error(error)
+  }
 });
 server.on('error', console.error);

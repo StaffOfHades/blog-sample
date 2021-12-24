@@ -9,8 +9,12 @@ export const PostList = () => {
   const [posts, setPosts] = useState<Record<string, PostAggregate>>({})
 
   const fetchPosts = useCallback(async () => {
-    const { data } = await axios.get("query-api/posts")
-    setPosts(data)
+    try {
+      const { data } = await axios.get("query-api/posts")
+      setPosts(data)
+    } catch(error) {
+      console.error(error)
+    }
   }, [])
 
   useEffect(() => {
