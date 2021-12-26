@@ -10,7 +10,8 @@
         "outputPath": "dist/apps/comments",
         "main": "apps/comments/src/main.ts",
         "tsConfig": "apps/comments/tsconfig.app.json",
-        "assets": ["apps/comments/src/assets"]
+        "assets": ["apps/comments/src/assets"],
+        "generatePackageJson": true
       },
       "configurations": {
         "production": {
@@ -24,6 +25,16 @@
             }
           ]
         }
+      }
+    },
+    "build-image": {
+      "builder": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "nx build comments --configuration=production",
+          "docker build -f ./apps/comments/Dockerfile . -t {args.dockerid}/comments"
+        ],
+        "parallel": false
       }
     },
     "serve": {

@@ -11,9 +11,10 @@ import {
   isPostCreatedEvent
 } from "@udemy.com/global/types"
 import axios from "axios";
-import * as express from 'express';
 import * as bodyParser from "body-parser";
+import * as express from 'express';
 import * as morgan from "morgan";
+import * as process from 'process';
 
 const app = express();
 app.use(bodyParser.json());
@@ -66,7 +67,7 @@ app.get('/posts', (req, res) => {
   res.send(posts);
 });
 
-const port = process.env.port || 4002;
+const port = process.env.PORT || 4002;
 const server = app.listen(port, async () => {
   console.log(`Listening at http://localhost:${port}/`);
 
@@ -82,3 +83,8 @@ const server = app.listen(port, async () => {
   }
 });
 server.on('error', console.error);
+
+process.on('SIGINT', () => {
+  console.info("Process interrupted")
+  process.exit(0)
+})

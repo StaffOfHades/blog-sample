@@ -5,9 +5,10 @@
 
 import { Event } from "@udemy.com/global/types"
 import axios from "axios"
-import * as express from 'express';
 import * as bodyParser from "body-parser";
+import * as express from 'express';
 import * as morgan from "morgan";
+import * as process from 'process';
 
 const app = express();
 app.use(bodyParser.json());
@@ -33,8 +34,13 @@ app.post('/events', (req, res) => {
   res.status(202).send({ status: "OK" })
 });
 
-const port = process.env.port || 4005;
+const port = process.env.PORT || 4005;
 const server = app.listen(port, () => {
   console.log(`Listening at http://localhost:${port}/`);
 });
 server.on('error', console.error);
+
+process.on('SIGINT', () => {
+  console.info("Process interrupted")
+  process.exit(0)
+})

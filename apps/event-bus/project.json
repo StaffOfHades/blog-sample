@@ -10,7 +10,8 @@
         "outputPath": "dist/apps/event-bus",
         "main": "apps/event-bus/src/main.ts",
         "tsConfig": "apps/event-bus/tsconfig.app.json",
-        "assets": ["apps/event-bus/src/assets"]
+        "assets": ["apps/event-bus/src/assets"],
+        "generatePackageJson": true
       },
       "configurations": {
         "production": {
@@ -24,6 +25,16 @@
             }
           ]
         }
+      }
+    },
+    "build-image": {
+      "builder": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "nx build event-bus --configuration=production",
+          "docker build -f ./apps/event-bus/Dockerfile . -t {args.dockerid}/event-bus"
+        ],
+        "parallel": false
       }
     },
     "serve": {

@@ -5,9 +5,10 @@
 
 import { EventType, Post, PostCreatedEvent } from "@udemy.com/global/types"
 import axios from "axios";
-import * as express from 'express';
 import * as bodyParser from "body-parser";
+import * as express from 'express';
 import * as morgan from "morgan";
+import * as process from 'process';
 import { v4 as uuidv4 } from 'uuid';
 
 const app = express();
@@ -38,8 +39,13 @@ app.post('/posts', (req, res) => {
   res.status(201).send(posts[id])
 });
 
-const port = process.env.port || 4000;
+const port = process.env.PORT || 4000;
 const server = app.listen(port, () => {
   console.log(`Listening at http://localhost:${port}/`);
 });
 server.on('error', console.error);
+
+process.on('SIGINT', () => {
+  console.info("Process interrupted")
+  process.exit(0)
+})
