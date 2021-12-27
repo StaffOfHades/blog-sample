@@ -1,0 +1,36 @@
+apiVersion: skaffold/v2beta26
+kind: Config
+metadata:
+  name: blog
+build:
+  local:
+    push: false
+  artifacts:
+  - image: staffofhades/blog
+    docker:
+      dockerfile: apps/blog/Dockerfile
+  - image: staffofhades/comments
+    docker:
+      dockerfile: apps/comments/Dockerfile
+  - image: staffofhades/event-bus
+    docker:
+      dockerfile: apps/event-bus/Dockerfile
+  - image: staffofhades/moderation
+    docker:
+      dockerfile: apps/moderation/Dockerfile
+  - image: staffofhades/posts
+    docker:
+      dockerfile: apps/posts/Dockerfile
+  - image: staffofhades/query
+    docker:
+      dockerfile: apps/query/Dockerfile
+deploy:
+  kubectl:
+    manifests:
+    - infra/k8s/blog-depl.yaml
+    - infra/k8s/comments-depl.yaml
+    - infra/k8s/event-bus-depl.yaml
+    - infra/k8s/ingress-srv.yaml
+    - infra/k8s/moderation-depl.yaml
+    - infra/k8s/posts-depl.yaml
+    - infra/k8s/query-depl.yaml
