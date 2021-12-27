@@ -32,7 +32,17 @@
       "options": {
         "commands": [
           "nx build moderation --configuration=production",
-          "docker build -f ./apps/moderation/Dockerfile . -t {args.dockerid}/moderation"
+          "docker build -f ./apps/moderation/Dockerfile . -t {args.dockerid}/moderation:{args.dockertag}"
+        ],
+        "parallel": false
+      }
+    },
+    "deploy": {
+      "builder": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "nx run moderation:build-image",
+          "docker push {args.dockerid}/moderation:{args.dockertag}"
         ],
         "parallel": false
       }

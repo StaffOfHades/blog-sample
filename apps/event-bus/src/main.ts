@@ -10,6 +10,8 @@ import * as express from 'express';
 import * as morgan from "morgan";
 import * as process from 'process';
 
+const postsApi = process.env.POSTS_API || "http://localhost:4000"
+
 const app = express();
 app.use(bodyParser.json());
 app.use(morgan('dev'));
@@ -25,7 +27,7 @@ app.post('/events', (req, res) => {
   events.push(event)
 
   Promise.allSettled([
-    axios.post("http://localhost:4000/events", event),
+    axios.post(`${postsApi}/events`, event),
     axios.post("http://localhost:4001/events", event),
     axios.post("http://localhost:4002/events", event),
     axios.post("http://localhost:4003/events", event),
@@ -42,5 +44,9 @@ server.on('error', console.error);
 
 process.on('SIGINT', () => {
   console.info("Process interrupted")
+  process.exit(0)
+})
+process.on('SIGTERM', () => {
+  console.info("Process terminated")
   process.exit(0)
 })

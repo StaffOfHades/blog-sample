@@ -90,3 +90,7 @@ process.on('SIGINT', () => {
   console.info("Process interrupted")
   process.exit(0)
 })
+process.on('SIGTERM', () => {
+  console.info("Process terminated")
+  process.exit(0)
+})
