@@ -4,11 +4,11 @@ WORKDIR /usr/app
 
 RUN npm install serve
 
-COPY ./dist/apps/blog ./
+COPY ./dist/apps/blog ./public
 
 ENV PORT=4200
 EXPOSE ${PORT}
 
 USER node
 
-CMD ["npx", "serve", "-l", "$PORT"]
+CMD ["npx", "serve", "public", "-l", "$PORT"]

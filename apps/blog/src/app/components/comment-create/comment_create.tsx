@@ -7,7 +7,7 @@ export const CommentCreate = ({ postId }: { postId: string  }) => {
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    await axios.post(`comments-api/posts/${postId}/comments`, { content })
+    await axios.post(`comments-service/posts/${postId}/comments`, { content })
     setContent('')
   }
 

@@ -59,7 +59,7 @@ app.post("/events", (req, res) => {
   const event: Event = req.body;
 
   if (handleEvent(event) !== undefined) {
-    res.status(400).send({ status: "Invalid event" });
+    res.status(204).send();
     return;
   }
   res.status(201).send()

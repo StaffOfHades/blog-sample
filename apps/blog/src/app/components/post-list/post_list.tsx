@@ -10,7 +10,7 @@ export const PostList = () => {
 
   const fetchPosts = useCallback(async () => {
     try {
-      const { data } = await axios.get("query-api/posts")
+      const { data } = await axios.get("query-service/posts")
       setPosts(data)
     } catch(error) {
       console.error(error)

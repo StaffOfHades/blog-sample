@@ -1,23 +1,23 @@
 {
-  "/comments-api": {
+  "/comments-service": {
     "target": "http://localhost:4001",
     "secure": false,
     "pathRewrite": {
-      "^/comments-api": ""
+      "^/comments-service": ""
     }
   },
-  "/posts-api": {
+  "/posts-service": {
     "target": "http://localhost:4000",
     "secure": false,
     "pathRewrite": {
-      "^/posts-api": ""
+      "^/posts-service": ""
     }
   },
-  "/query-api": {
+  "/query-service": {
     "target": "http://localhost:4002",
     "secure": false,
     "pathRewrite": {
-      "^/query-api": ""
+      "^/query-service": ""
     }
   }
 }

@@ -50,7 +50,7 @@ app.post("/events", (req, res) => {
       axios.post(`${eventBusService}/events`, event).catch((error) => console.error(error));
     }
   } else {
-    res.status(400).send({ status: "Invalid event" });
+    res.status(204).send();
     return;
   }
   res.status(201).send()

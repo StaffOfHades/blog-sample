@@ -1,0 +1,51 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  name: ingress-services-srv
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: posts.com
+    http:
+      paths:
+      - path: /comments-service(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: comments-clusterip-srv
+            port:
+              number: 4001
+      - path: /posts-service(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: posts-clusterip-srv
+            port:
+              number: 4000
+      - path: /query-service(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: query-clusterip-srv
+            port:
+              number: 4002
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-blog-srv
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: posts.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: blog-clusterip-srv
+            port:
+              number: 4200

@@ -7,7 +7,7 @@ export const PostCreate = () => {
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    await axios.post("posts-api/posts", { title })
+    await axios.post("posts-service/posts", { title })
     setTitle('')
   }
 
