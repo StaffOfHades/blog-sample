@@ -11,7 +11,7 @@ import * as morgan from "morgan";
 import * as process from 'process';
 import { v4 as uuidv4 } from 'uuid';
 
-const eventsApi = process.env.EVENTS_API || "http://localhost:4005"
+const eventBusService = process.env.EVENTS_SERVICE || "http://localhost:4005"
 
 const app = express();
 app.use(bodyParser.json());
@@ -36,7 +36,7 @@ app.post('/posts', (req, res) => {
     data: posts[id],
     type: EventType.PostCreated,
   }
-  axios.post(`${eventsApi}/events`, event).catch((error) => console.error(error));
+  axios.post(`${eventBusService}/events`, event).catch((error) => console.error(error));
 
   res.status(201).send(posts[id])
 });

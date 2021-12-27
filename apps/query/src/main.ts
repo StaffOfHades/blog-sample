@@ -16,6 +16,8 @@ import * as express from 'express';
 import * as morgan from "morgan";
 import * as process from 'process';
 
+const eventBusService = process.env.EVENTS_SERVICE || "http://localhost:4005"
+
 const app = express();
 app.use(bodyParser.json());
 app.use(morgan('dev'));
@@ -72,7 +74,7 @@ const server = app.listen(port, async () => {
   console.log(`Listening at http://localhost:${port}/`);
 
   try {
-    const { data } = await axios.get<Array<Event>>("http://localhost:4005/events")
+    const { data } = await axios.get<Array<Event>>(`${eventBusService}/events`)
     for (let event of data) {
       if (handleEvent(event) === undefined) {
         console.log("Processing existing event of type ", event.type)

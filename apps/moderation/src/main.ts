@@ -16,6 +16,8 @@ import * as express from 'express';
 import * as morgan from "morgan";
 import * as process from 'process';
 
+const eventBusService = process.env.EVENTS_SERVICE || "http://localhost:4005"
+
 const app = express();
 app.use(bodyParser.json());
 app.use(morgan('dev'));
@@ -36,7 +38,7 @@ app.post("/events", (req, res) => {
       },
       type: EventType.CommentModerated,
     }
-    axios.post("http://localhost:4005/events", moderationEvent).catch((error) => console.error(error));
+    axios.post(`${eventBusService}/events`, moderationEvent).catch((error) => console.error(error));
   } else {
     res.status(400).send({ status: "Invalid event" });
     return;

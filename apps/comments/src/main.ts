@@ -19,6 +19,8 @@ import * as morgan from "morgan";
 import * as process from 'process';
 import { v4 as uuidv4 } from 'uuid';
 
+const eventBusService = process.env.EVENTS_SERVICE || "http://localhost:4005"
+
 const app = express();
 app.use(bodyParser.json());
 app.use(morgan('dev'));
@@ -45,7 +47,7 @@ app.post("/events", (req, res) => {
         },
         type: EventType.CommentUpdated,
       }
-      axios.post("http://localhost:4005/events", event).catch((error) => console.error(error));
+      axios.post(`${eventBusService}/events`, event).catch((error) => console.error(error));
     }
   } else {
     res.status(400).send({ status: "Invalid event" });
@@ -75,7 +77,7 @@ app.post('/posts/:id/comments', (req, res) => {
     },
     type: EventType.CommentCreated,
   }
-  axios.post("http://localhost:4005/events", event).catch((error) => console.error(error));
+  axios.post(`${eventBusService}/events`, event).catch((error) => console.error(error));
 
   res.status(201).send(Object.values(commentsByPostId[postId]))
 });

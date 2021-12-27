@@ -10,7 +10,10 @@ import * as express from 'express';
 import * as morgan from "morgan";
 import * as process from 'process';
 
-const postsApi = process.env.POSTS_API || "http://localhost:4000"
+const commentsService = process.env.COMMENTS_SERVICE || "http://localhost:4001"
+const moderationService = process.env.MODERATION_SERVICE || "http://localhost:4003"
+const postsService = process.env.POSTS_SERVICE || "http://localhost:4000"
+const queryService = process.env.QUERY_SERVICE || "http://localhost:4002"
 
 const app = express();
 app.use(bodyParser.json());
@@ -27,10 +30,10 @@ app.post('/events', (req, res) => {
   events.push(event)
 
   Promise.allSettled([
-    axios.post(`${postsApi}/events`, event),
-    axios.post("http://localhost:4001/events", event),
-    axios.post("http://localhost:4002/events", event),
-    axios.post("http://localhost:4003/events", event),
+    axios.post(`${commentsService}/events`, event),
+    axios.post(`${moderationService}/events`, event),
+    axios.post(`${postsService}/events`, event),
+    axios.post(`${queryService}/events`, event),
   ]).catch((error) => res.status(502).send(error));
 
   res.status(202).send({ status: "OK" })

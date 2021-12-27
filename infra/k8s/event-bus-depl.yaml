@@ -16,21 +16,27 @@ spec:
         - name: event-bus
           image: staffofhades/event-bus
           env:
+            - name: COMMENTS_SERVICE
+              value: "http://comments-clusterip-srv:4001"
+            - name: MODERATION_SERVICE
+              value: "http://moderation-clusterip-srv:4003"
             - name: PORT
               value: "4005"
-            - name: POSTS_API
+            - name: POSTS_SERVICE
               value: "http://posts-clusterip-srv:4000"
+            - name: "QUERY_SERVICE"
+              value: "http://query-clusterip-srv:4002"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: event-bus-srv
+  name: event-bus-clusterip-srv
 spec:
   type: ClusterIP # Optional; default value
   selector:
     app: event-bus
   ports:
-    - name: event-bus
+    - name: event-bus-clusterip
       protocol: TCP
       port: 4005
       targetPort: 4005
