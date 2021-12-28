@@ -6,7 +6,6 @@
     "build": {
       "executor": "@nrwl/web:webpack",
       "outputs": ["{options.outputPath}"],
-      "defaultConfiguration": "production",
       "options": {
         "compiler": "babel",
         "outputPath": "dist/apps/blog",
@@ -40,19 +39,23 @@
     "build-image": {
       "builder": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "docker build -f ./apps/blog/Dockerfile . -t {args.dockerid}/blog:{args.dockertag}"
+        "command": "docker build -f ./apps/blog/dev.Dockerfile . -t {args.dockerid}/blog:dev-{args.dockertag}"
       },
       "configurations": {
-        "production": {}
+        "production": {
+          "command": "docker build -f ./apps/blog/Dockerfile . -t {args.dockerid}/blog:{args.dockertag}"
+        }
       }
     },
     "deploy": {
       "builder": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "docker push {args.dockerid}/blog:{args.dockertag}"
+        "command": "docker push {args.dockerid}/blog:dev-{args.dockertag}"
       },
       "configurations": {
-        "production": {}
+        "production": {
+          "command": "docker push {args.dockerid}/blog:{args.dockertag}"
+        }
       }
     },
     "serve": {

@@ -36,13 +36,15 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ingress-blog-srv
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
   ingressClassName: nginx
   rules:
   - host: posts.com
     http:
       paths:
-      - path: /
+      - path: /?(.*)
         pathType: Prefix
         backend:
           service:

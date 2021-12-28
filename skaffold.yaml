@@ -3,34 +3,51 @@ kind: Config
 metadata:
   name: blog
 build:
-  local:
-    push: false
   artifacts:
   - image: staffofhades/blog
     docker:
       dockerfile: apps/blog/Dockerfile
+    hooks:
+      before:
+        - command: ["nx", "run", "blog:build:production"]
+          os: [darwin, linux]
   - image: staffofhades/comments
     docker:
       dockerfile: apps/comments/Dockerfile
+    hooks:
+      before:
+        - command: ["nx", "run", "comments:build:production"]
+          os: [darwin, linux]
   - image: staffofhades/event-bus
     docker:
       dockerfile: apps/event-bus/Dockerfile
+    hooks:
+      before:
+        - command: ["nx", "run", "event-bus:build:production"]
+          os: [darwin, linux]
   - image: staffofhades/moderation
     docker:
       dockerfile: apps/moderation/Dockerfile
+    hooks:
+      before:
+        - command: ["nx", "run", "moderation:build:production"]
+          os: [darwin, linux]
   - image: staffofhades/posts
     docker:
       dockerfile: apps/posts/Dockerfile
+    hooks:
+      before:
+        - command: ["nx", "run", "posts:build:production"]
+          os: [darwin, linux]
   - image: staffofhades/query
     docker:
       dockerfile: apps/query/Dockerfile
+    hooks:
+      before:
+        - command: ["nx", "run", "query:build:production"]
+          os: [darwin, linux]
 deploy:
   kubectl:
     manifests:
-    - infra/k8s/blog-depl.yaml
-    - infra/k8s/comments-depl.yaml
-    - infra/k8s/event-bus-depl.yaml
+    - infra/k8s/production/*.yaml
     - infra/k8s/ingress-srv.yaml
-    - infra/k8s/moderation-depl.yaml
-    - infra/k8s/posts-depl.yaml
-    - infra/k8s/query-depl.yaml

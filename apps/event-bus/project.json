@@ -30,19 +30,23 @@
     "build-image": {
       "builder": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "docker build -f ./apps/event-bus/Dockerfile . -t {args.dockerid}/event-bus:{args.dockertag}"
+        "command": "docker build -f ./apps/event-bus/dev.Dockerfile . -t {args.dockerid}/event-bus:dev-{args.dockertag}"
       },
       "configurations": {
-        "production": {}
+        "production": {
+          "command": "docker build -f ./apps/event-bus/Dockerfile . -t {args.dockerid}/event-bus:{args.dockertag}"
+        }
       }
     },
     "deploy": {
       "builder": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "docker push {args.dockerid}/event-bus:{args.dockertag}"
+        "command": "docker push {args.dockerid}/event-bus:dev-{args.dockertag}"
       },
       "configurations": {
-        "production": {}
+        "production": {
+          "command": "docker push {args.dockerid}/event-bus:{args.dockertag}"
+        }
       }
     },
     "serve": {

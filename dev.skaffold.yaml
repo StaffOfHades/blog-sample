@@ -1,0 +1,63 @@
+apiVersion: skaffold/v2beta26
+kind: Config
+metadata:
+  name: blog
+build:
+  local:
+    push: false
+  tagPolicy:
+    sha256: {}
+  artifacts:
+  - image: staffofhades/blog
+    docker:
+      dockerfile: apps/blog/dev.Dockerfile
+      buildArgs:
+        publicHost: http://posts.com
+    sync:
+      manual:
+      - src: "apps/blog/src/**/*.{css,sass,scss}"
+        dest: .
+      - src: "apps/blog/src/**/*.{js,jsx,ts,tsx}"
+        dest: .
+      - src: "apps/blog/src/**/*.html"
+        dest: .
+  - image: staffofhades/comments
+    docker:
+      dockerfile: apps/comments/dev.Dockerfile
+    sync:
+      manual:
+      - src: "apps/comments/src/**/*.{js,ts}"
+        dest: .
+  - image: staffofhades/event-bus
+    docker:
+      dockerfile: apps/event-bus/dev.Dockerfile
+    sync:
+      manual:
+      - src: "apps/event-bus/src/**/*.{js,ts}"
+        dest: .
+  - image: staffofhades/moderation
+    docker:
+      dockerfile: apps/moderation/dev.Dockerfile
+    sync:
+      manual:
+      - src: "apps/moderation/src/**/*.{js,ts}"
+        dest: .
+  - image: staffofhades/posts
+    docker:
+      dockerfile: apps/posts/dev.Dockerfile
+    sync:
+      manual:
+      - src: "apps/posts/src/**/*.{js,ts}"
+        dest: .
+  - image: staffofhades/query
+    docker:
+      dockerfile: apps/query/dev.Dockerfile
+    sync:
+      manual:
+      - src: "apps/query/src/**/*.{js,ts}"
+        dest: .
+deploy:
+  kubectl:
+    manifests:
+    - infra/k8s/development/*.yaml
+    - infra/k8s/ingress-srv.yaml
